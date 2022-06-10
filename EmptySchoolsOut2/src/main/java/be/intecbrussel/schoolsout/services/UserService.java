@@ -6,7 +6,6 @@ import be.intecbrussel.schoolsout.repositories.CourseRepository;
 import be.intecbrussel.schoolsout.repositories.GradeRepository;
 import be.intecbrussel.schoolsout.repositories.UserRepository;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,6 @@ public class UserService {
         Scanner scanner = new Scanner(System.in);
         Person person = new Person();
         User user = new User();
-
         System.out.println("Give me your userName:");
         String input = scanner.next();
         user.setLogin(input);
@@ -50,6 +48,7 @@ public class UserService {
        }
        user.setPerson(person);
        userRepository.createOne(user);
+       System.out.println("Thank you for registering. Here is your account information: \n" + user);
 
     }
     // Delete een user, en delete ook de Person EN de Grades van die Person
@@ -58,23 +57,20 @@ public class UserService {
         System.out.println("User name of user you'd like to delete?");
         String login = scanner.next();
         User user = userRepository.getOneById(login);
-        Queue<Grade> gradeQueue = new LinkedList<>();
-        gradeQueue.addAll(gradeRepository.findAllGradesForUser(user));
-        while(gradeQueue.size() >0){
-            Grade grade= gradeQueue.poll();
-            gradeRepository.deleteOne(grade.getId());
-        }
+        System.out.println("The user you'd like to delete is: " + user + "\nAre you sure? Y/N");
+        String answer = scanner.next();
+        if (answer.toUpperCase(Locale.ROOT).equals("N")){
+            System.out.println("Mission aborted.");
+        } else{
+            Queue<Grade> gradeQueue = new LinkedList<>();
+            gradeQueue.addAll(gradeRepository.findAllGradesForUser(user));
+            while(gradeQueue.size() >0){
+                Grade grade= gradeQueue.poll();
+                gradeRepository.deleteOne(grade.getId());
+            }
         userRepository.deleteOne(login);
-//        User user = userRepository.getOneById(scanner.next());
-//        String userID = user.getLogin();
-//        System.out.println("The user you'd like to delete is: " + user + " Y/N");
-//        String answer = scanner.next();
-//        if (answer.toUpperCase(Locale.ROOT).equals("N")){
-//            System.out.println("Mission aborted.");
-//        } else{
-//            userRepository.deleteOne(userID);
-//            System.out.println("User deleted.");
-//    }
+        System.out.println("User deleted.");
+        }
     }
 
     //Update de User. Je mag enkel vragen om het volgende te updaten: User.active, Person.firstName en Person.lastName
@@ -95,7 +91,6 @@ public class UserService {
                 user.setActive(true);
           }
         }
-
         if (number == 2) {
             System.out.println("Please enter new first name: ");
             String firstName = scanner.next();
@@ -119,8 +114,6 @@ public class UserService {
         System.out.println("Please enter user name:");
         User user = userRepository.getOneById(scanner.nextLine());
         System.out.println(user);
-
-
     }
 
     //Print alle users af van de database
@@ -129,11 +122,9 @@ public class UserService {
         for (User user : userRepository.getAll()){
             System.out.println(user);
         }
-
     }
 
-    //TODO: Toon eerst alle courses. Op basis van de relatie tussen Course, Grade en Person toon je dan alle Persons die die Course hebben gedaan
-    //TODO: Ik kan dit met gewone method, maar het lukt mij niet om dit met JPA te doen. :( Gewone method beneden.
+    // Toon eerst alle courses. Op basis van de relatie tussen Course, Grade en Person toon je dan alle Persons die die Course hebben gedaan
     public void showAllPeoplePerCourse(){
         Scanner scanner = new Scanner(System.in);
         List<Course> courseList = courseRepository.getAll();
@@ -145,17 +136,13 @@ public class UserService {
         Course course = courseRepository.getOneById(courseId);
         List<Grade> allGradesFromCourse = course.getGradesOfCourse();
         List<Person> personList = allGradesFromCourse.stream().map(Grade::getPerson).collect(Collectors.toList());
+        System.out.println("All students enrolled in " + course.getName() + ":");
         for(Person peopleInCourse : personList){
             System.out.println(peopleInCourse);
-
         }
-
-//            //TODO: find the right query for VVV
-//            userRepository.getUsersByCourse(c);
     }
-
-
-
-
-
 }
+
+
+
+

@@ -1,15 +1,11 @@
 package be.intecbrussel.schoolsout.repositories;
 
 import be.intecbrussel.schoolsout.data.Course;
-import be.intecbrussel.schoolsout.data.Grade;
-import be.intecbrussel.schoolsout.data.Person;
 import be.intecbrussel.schoolsout.data.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserRepository {
 
@@ -53,14 +49,7 @@ public class UserRepository {
     }
 
     public List<User> getUsersByCourse(Course course) {
-        EntityManager em = EMFactory.getEmf().createEntityManager();
-        User user = new User();
-        Query query = em.createQuery("SELECT Person FROM User WHERE person =" + user.getPerson());
-        return query.getResultList();
-
-
-
-
+        return null;//method in UserService.showAllPeoplePerCourse()
     }
 
 }

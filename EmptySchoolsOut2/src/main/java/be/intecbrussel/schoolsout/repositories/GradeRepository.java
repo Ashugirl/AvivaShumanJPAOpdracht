@@ -1,11 +1,8 @@
 package be.intecbrussel.schoolsout.repositories;
 
 
-import be.intecbrussel.schoolsout.data.Course;
 import be.intecbrussel.schoolsout.data.Grade;
-import be.intecbrussel.schoolsout.data.Person;
 import be.intecbrussel.schoolsout.data.User;
-import be.intecbrussel.schoolsout.services.GradeService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

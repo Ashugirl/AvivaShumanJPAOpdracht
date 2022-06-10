@@ -74,9 +74,8 @@ public class MainClass {
                 case 2:userService.findOneUserById();break;//LEVEL 1 done
                 case 3:userService.createUser();break;//LEVEL 2 done
                 case 4:userService.updateUser();break;//LEVEL 3 done
-                case 5:userService.deleteUser();break;//LEVEL 3
-                //TODO find the right query to return all people per course
-                case 6:userService.showAllPeoplePerCourse();break;//LEVEL 4
+                case 5:userService.deleteUser();break;//LEVEL 3 done
+                case 6:userService.showAllPeoplePerCourse();break;//LEVEL 4 done
             }
             System.out.println("We did a User thing!");
 
@@ -128,8 +127,7 @@ public class MainClass {
         switch (choiceTwo){
             case 1:courseService.findAllGradesFromCourse();break;//LEVEL 2 done
             case 2:gradeService.findAllGradesForUser();break;//LEVEL 3 done
-            //TODO figure out how to check for already existing grade for user
-            case 3:gradeService.createGradeForUserOnCourse();break;//LEVEL 4 ALMOST done
+            case 3:gradeService.createGradeForUserOnCourse();break;//LEVEL 4  done
             case 4:gradeService.updateGradeForUserOnCourse();break;//LEVEL 2 done
             case 5:gradeService.deleteGradeForUserOnCourse();break;//LEVEL 1 done
         }

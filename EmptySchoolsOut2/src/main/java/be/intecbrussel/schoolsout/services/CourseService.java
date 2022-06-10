@@ -2,23 +2,20 @@ package be.intecbrussel.schoolsout.services;
 
 import be.intecbrussel.schoolsout.data.Course;
 import be.intecbrussel.schoolsout.data.Grade;
-import be.intecbrussel.schoolsout.data.User;
 import be.intecbrussel.schoolsout.repositories.CourseRepository;
-import org.hibernate.engine.jdbc.spi.SchemaNameResolver;
+import be.intecbrussel.schoolsout.repositories.GradeRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 public class CourseService {
 
     private CourseRepository courseRepository;
+    private GradeRepository gradeRepository;
 
     public CourseService() {
         courseRepository = new CourseRepository();
-
+        gradeRepository = new GradeRepository();
     }
 
     //Maak een Course met de constructor
@@ -30,24 +27,30 @@ public class CourseService {
         String description = scanner.nextLine();
         System.out.println("Maximum points for course?");
         BigDecimal maxValue = scanner.nextBigDecimal();
-
         courseRepository.createOne(new Course(name, description, maxValue));
+        System.out.println("Course added.");
     }
 
-    //TODO: Delete een course, en delete alle Grades van die Course
+    // Delete een course, en delete alle Grades van die Course
     public void deleteCourse(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("ID of course you'd like to delete?");
         Course course = courseRepository.getOneById(scanner.nextLong());
         Long courseID = course.getId();
-        System.out.println("The course you'd like to delete is: " + course + " Y/N");
+        System.out.println("The course you'd like to delete is: " + course + "\nAre you sure? Y/N");
         String answer = scanner.next();
         if (answer.toUpperCase(Locale.ROOT).equals("N")){
             System.out.println("Mission aborted.");
         } else{
+            Queue<Grade> gradeQueue = new LinkedList<>();
+            gradeQueue.addAll(course.getGradesOfCourse());
+            while(gradeQueue.size() >0){
+                Grade grade= gradeQueue.poll();
+                gradeRepository.deleteOne(grade.getId());
+            }
         courseRepository.deleteOne(courseID);
         System.out.println("Course deleted.");
-    }
+      }
     }
 
     //Update een Course. Je mag enkel de name, description en maxGradeYouCanGet editten
@@ -77,7 +80,6 @@ public class CourseService {
             BigDecimal maxGrade = scanner.nextBigDecimal();
             course.setMaxGradeYouCanGet(maxGrade);
         }
-
         courseRepository.updateOne(course);
         System.out.println("The updated course is: " + course);
     }
@@ -88,7 +90,6 @@ public class CourseService {
         System.out.println("Please enter the course ID:");
         Course course = courseRepository.getOneById(scanner.nextLong());
         System.out.println(course);
-
     }
 
     // Toon alle Courses
@@ -109,8 +110,4 @@ public class CourseService {
             System.out.println(g);
         }
     }
-
-
-
-
 }

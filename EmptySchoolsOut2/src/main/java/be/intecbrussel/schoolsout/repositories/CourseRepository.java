@@ -1,7 +1,6 @@
 package be.intecbrussel.schoolsout.repositories;
 
 import be.intecbrussel.schoolsout.data.Course;
-import be.intecbrussel.schoolsout.data.User;
 
 
 import javax.persistence.EntityManager;
